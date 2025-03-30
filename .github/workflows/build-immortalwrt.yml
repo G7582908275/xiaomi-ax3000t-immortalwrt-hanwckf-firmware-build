@@ -1,14 +1,17 @@
 name: Build ImmortalWrt Firmware
 on:
-  schedule:
-    - cron: "0 0 20 * *"
   workflow_dispatch:
-
-
+    inputs:
+      config_file:
+        description: 配置文件
+        required: true
+        default: .config
+        type: string
+        
 env:
   REPO_URL: https://github.com/hanwckf/immortalwrt-mt798x.git
   REPO_BRANCH: openwrt-21.02
-  CONFIG_FILE: .config
+  CONFIG_FILE: ${{ inputs.config_file }}
   SELF_BEFORE_SH: before-update-custom.sh
   SELF_AFTER_SH: after-update-custom.sh
   TZ: Asia/Shanghai
