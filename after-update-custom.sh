@@ -9,6 +9,7 @@ sed -i "s/option start.*/option start \'2\'/g" package/network/services/dnsmasq/
 sed -i "s/option limit.*/option limit \'55\'/g" package/network/services/dnsmasq/files/dhcp.conf
 
 # Create /etc/hotplug.d/iface/90-appfast script
+mkdir -p /etc/hotplug.d/iface/
 cat > /etc/hotplug.d/iface/90-appfast << 'EOF'
 #!/bin/sh
 # Description: Run a script when the internet is available
