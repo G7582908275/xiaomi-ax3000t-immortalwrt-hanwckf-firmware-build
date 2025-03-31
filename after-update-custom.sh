@@ -8,9 +8,11 @@ sed -i 's/192.168.1.1/192.168.71.1/g' package/base-files/files/bin/config_genera
 sed -i "s/option start.*/option start \'2\'/g" package/network/services/dnsmasq/files/dhcp.conf
 sed -i "s/option limit.*/option limit \'55\'/g" package/network/services/dnsmasq/files/dhcp.conf
 
-# Create /etc/hotplug.d/iface/90-appfast script
-mkdir -p /etc/hotplug.d/iface/
-cat > /etc/hotplug.d/iface/90-appfast << 'EOF'
+# Ensure /etc/hotplug.d/iface/ directory exists in the build system
+mkdir -p files/etc/hotplug.d/iface
+
+# Create /etc/hotplug.d/iface/90-appfast script in the build system
+cat > files/etc/hotplug.d/iface/90-appfast << 'EOF'
 #!/bin/sh
 # Description: Run a script when the internet is available
 
@@ -26,5 +28,5 @@ if [ "$ACTION" = "ifup" ] && [ "$INTERFACE" = "wan" ]; then
 fi
 EOF
 
-# Set execution permission for the hotplug script
-chmod +x /etc/hotplug.d/iface/90-appfast
+# Set execution permission for the hotplug script in the build system
+chmod +x files/etc/hotplug.d/iface/90-appfast
