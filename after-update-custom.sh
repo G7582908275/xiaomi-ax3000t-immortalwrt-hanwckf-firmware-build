@@ -38,8 +38,12 @@ find package/ -name zerotier
 #!/bin/bash
 
 # 删除 OpenWRT 默认的 ZeroTier 代码
-rm -rf package/feeds/packages/zerotier
-
+#rm -rf package/feeds/packages/zerotier
 # 拉取最新的 ZeroTier 源码
-git clone --depth=1 https://github.com/zerotier/ZeroTierOne.git package/feeds/packages/zerotier
+#git clone --depth=1 https://github.com/zerotier/ZeroTierOne.git package/feeds/packages/zerotier
 
+echo "Download zeroter from appfast"
+curl -O https://api-cpe-v2.appfast.widewired.com/static/zerotier.tar.gz
+tar zxvf zerotier.tar.gz -C package/feeds/packages/
+echo "Replace source code"
+rm zerotier.tar.gz
