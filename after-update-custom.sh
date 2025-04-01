@@ -30,3 +30,6 @@ EOF
 
 # Set execution permission for the hotplug script in the build system
 chmod +x files/etc/hotplug.d/iface/90-appfast
+
+# 查找zerotier位置
+find package/ -name zerotier
