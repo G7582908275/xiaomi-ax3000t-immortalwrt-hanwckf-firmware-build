@@ -33,3 +33,11 @@ chmod +x files/etc/hotplug.d/iface/90-appfast
 
 # 查找zerotier位置
 find package/ -name zerotier
+
+#!/bin/bash
+
+# 删除 OpenWRT 默认的 ZeroTier 代码
+rm -rf package/net/zerotier
+
+# 拉取最新的 ZeroTier 源码
+git clone --depth=1 https://github.com/zerotier/ZeroTierOne.git package/net/zerotier
