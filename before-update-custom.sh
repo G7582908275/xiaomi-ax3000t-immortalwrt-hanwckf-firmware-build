@@ -12,8 +12,8 @@
 # echo "src-git small https://github.com/kenzok8/small" >> ./feeds.conf.default
 
 # 方法1
-echo "src-git zerotier https://github.com/zerotier/ZeroTierOne.git" >> ./feeds.conf.default
+# echo "src-git zerotier https://github.com/zerotier/ZeroTierOne.git" >> ./feeds.conf.default
 
 # 方法2
-#rm -rf package/network/services/zerotier
-#git clone --depth=1 https://github.com/zerotier/ZeroTierOne.git package/network/services/zerotier
+rm -rf package/network/services/zerotier
+git clone --depth=1 https://github.com/zerotier/ZeroTierOne.git package/network/services/zerotier
