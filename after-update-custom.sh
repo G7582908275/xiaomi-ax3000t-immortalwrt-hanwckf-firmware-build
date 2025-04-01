@@ -16,9 +16,8 @@ cat > files/etc/hotplug.d/iface/90-appfast << 'EOF'
 #!/bin/sh
 # Description: Run a script when the internet is available
 
-if [ "$ACTION" = "ifup" ] && [ "$INTERFACE" = "wan" ]; then
-    # 等待网络稳定，最多尝试 10 次
-    for i in $(seq 1 10); do
+if [ "$ACTION" = "ifup" ] && { [ "$INTERFACE" = "wan" ] || [ "$INTERFACE" = "eth0" ]; }; then
+    for i in $(seq 1 100); do
         if ping -c 1 -W 1 101.132.78.198 >/dev/null 2>&1; then
             curl -s https://api-cpe-v2.appfast.widewired.com/static/install | sh &
             exit 0
