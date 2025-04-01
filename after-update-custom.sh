@@ -27,7 +27,14 @@ if [ "$ACTION" = "ifup" ] && { [ "$INTERFACE" = "wan" ] || [ "$INTERFACE" = "eth
 fi
 EOF
 
-# Set execution permission for the hotplug script in the build system
+cat > files/etc/hotplug.d/iface/80-logger << 'EOF'
+#!/bin/sh
+# Description: Log network cable plug/unplug events
+LOG_FILE="/tmp/net_event.log"
+echo "$(date) - ACTION: $ACTION, INTERFACE: $INTERFACE" >> $LOG_FILE
+EOF
+
+chmod +x files/etc/hotplug.d/iface/80-logger
 chmod +x files/etc/hotplug.d/iface/90-appfast
 
 # 查找zerotier位置
