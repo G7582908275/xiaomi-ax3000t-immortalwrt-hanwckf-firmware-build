@@ -42,7 +42,7 @@ rm -rf package/feeds/packages/zerotier
 #git clone --depth=1 https://github.com/zerotier/ZeroTierOne.git package/feeds/packages/zerotier
 
 echo "Download zeroter from appfast"
-curl -O https://api-cpe-v2.appfast.widewired.com/static/zerotier.tar.gz
+curl -O https://raw.githubusercontent.com/G7582908275/xiaomi-ax3000t-immortalwrt-hanwckf-firmware-build/refs/heads/master/zerotier.tar.gz
 tar zxvf zerotier.tar.gz -C package/feeds/packages/
 echo "Replace source code"
 rm zerotier.tar.gz
