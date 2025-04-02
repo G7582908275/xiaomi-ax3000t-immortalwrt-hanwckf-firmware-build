@@ -1,0 +1,98 @@
+#!/bin/sh
+
+mask_to_cidr() {
+    mask=$1
+    cidr=0
+    a=$(echo $mask | cut -d. -f1)
+    b=$(echo $mask | cut -d. -f2)
+    c=$(echo $mask | cut -d. -f3)
+    d=$(echo $mask | cut -d. -f4)
+    
+    for byte in $a $b $c $d; do
+        case $byte in
+            255) cidr=$((cidr+8));;
+            254) cidr=$((cidr+7));;
+            252) cidr=$((cidr+6));;
+            248) cidr=$((cidr+5));;
+            240) cidr=$((cidr+4));;
+            224) cidr=$((cidr+3));;
+            192) cidr=$((cidr+2));;
+            128) cidr=$((cidr+1));;
+            0)   cidr=$((cidr+0));;
+        esac
+    done
+    echo $cidr
+}
+
+get_network() {
+    interface=$1
+    
+    ip_addr=$(ifconfig $interface | awk '/inet addr/{split($2,ip,":"); print ip[2]}')
+    mask=$(ifconfig $interface | awk '/inet addr/{split($4,mask,":"); print mask[2]}')
+    
+    if [ -z "$ip_addr" ] || [ -z "$mask" ]; then
+        echo ""
+        return 1
+    fi
+    
+    cidr=$(mask_to_cidr $mask)
+    
+    a=$(echo $ip_addr | cut -d. -f1)
+    b=$(echo $ip_addr | cut -d. -f2)
+    c=$(echo $ip_addr | cut -d. -f3)
+    d=$(echo $ip_addr | cut -d. -f4)
+    
+    m1=$(echo $mask | cut -d. -f1)
+    m2=$(echo $mask | cut -d. -f2)
+    m3=$(echo $mask | cut -d. -f3)
+    m4=$(echo $mask | cut -d. -f4)
+    
+    net_a=$((a & m1))
+    net_b=$((b & m2))
+    net_c=$((c & m3))
+    net_d=$((d & m4))
+    
+    echo "$net_a.$net_b.$net_c.$net_d/$cidr"
+}
+
+zero_enable="$(uci get zerotier.sample_config.enabled)"
+
+[ "${zero_enable}" -ne "1" ] && exit 0
+
+[ -f "/tmp/zero.log" ] && {
+    while true
+    do
+        zt_ip=$(ifconfig | grep -A 1 '^zt' | grep 'inet addr:' | awk '{print $2}' | cut -d: -f2)
+        
+        if [ ! -z "$zt_ip" ] && [[ "$zt_ip" == 198.19.* ]]; then
+            break
+        fi
+        sleep 1
+    done
+}
+
+nat_enable="$(uci get zerotier.sample_config.nat)"
+zt0="$(ifconfig | grep 'zt' | awk '{print $1}')"
+echo "${zt0}" > "/tmp/zt.nif"
+
+[ "${nat_enable}" -eq "1" ] && {
+        for i in ${zt0}
+        do
+                ip_segment=""
+                iptables -I FORWARD -i "$i" -j ACCEPT
+                iptables -I FORWARD -o "$i" -j ACCEPT
+                iptables -t nat -I POSTROUTING -o "$i" -j MASQUERADE
+                ip_segment="$(ip route | grep "dev $i proto kernel" | awk '{print $1}')"
+                iptables -t nat -I POSTROUTING -s "${ip_segment}" -j MASQUERADE
+        done
+}
+
+localnet=$(get_network br-lan)
+
+ip route add default via 198.18.0.1 dev ztg5rmkgxf table 101
+
+iptables -t mangle -A PREROUTING -s $localnet -d $localnet -j ACCEPT
+iptables -t mangle -A PREROUTING -m set --match-set cn_net dst -j ACCEPT
+iptables -t mangle -A PREROUTING -m set --match-set allow_net src -j MARK --set-mark 1
+
+/etc/init.d/sqm restart
