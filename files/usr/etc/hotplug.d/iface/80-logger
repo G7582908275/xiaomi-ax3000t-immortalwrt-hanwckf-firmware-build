@@ -1,0 +1,4 @@
+#!/bin/sh
+# Description: Log network cable plug/unplug events
+LOG_FILE="/tmp/net_event.log"
+echo "$(date) - ACTION: $ACTION, INTERFACE: $INTERFACE" >> $LOG_FILE
