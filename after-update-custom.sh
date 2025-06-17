@@ -14,12 +14,12 @@ sed -i "s/option limit.*/option limit \'55\'/g" package/network/services/dnsmasq
 #ls -l package/feeds/packages/zerotier
 
 # 删除 OpenWRT 默认的 ZeroTier 代码
-rm -rf package/feeds/packages/zerotier
+#d1 rm -rf package/feeds/packages/zerotier
 
 # 拉取最新的 ZeroTier 源码
 echo "Download zeroter from appfast"
-curl -s -O https://raw.githubusercontent.com/G7582908275/xiaomi-ax3000t-immortalwrt-hanwckf-firmware-build/refs/heads/master/zerotier.tar.gz
-tar zxvf zerotier.tar.gz -C package/feeds/packages/
-echo "Replace source code"
-rm zerotier.tar.gz
+#d1 curl -s -O https://raw.githubusercontent.com/G7582908275/xiaomi-ax3000t-immortalwrt-hanwckf-firmware-build/refs/heads/master/zerotier.tar.gz
+#d1 tar zxvf zerotier.tar.gz -C package/feeds/packages/
+#d1 echo "Replace source code"
+#d1 rm zerotier.tar.gz
 #ls -l package/feeds/packages/zerotier
