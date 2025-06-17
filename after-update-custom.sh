@@ -19,10 +19,10 @@ rm -rf package/feeds/packages/zerotier
 # 拉取最新的 ZeroTier 源码
 echo "Download zeroter from appfast"
 #curl -s -O https://raw.githubusercontent.com/G7582908275/xiaomi-ax3000t-immortalwrt-hanwckf-firmware-build/refs/heads/master/zerotier.tar.gz
-curl -s -O https://raw.githubusercontent.com/G7582908275/xiaomi-ax3000t-immortalwrt-hanwckf-firmware-build/refs/heads/master/ZeroTierOne-1.14.1.tar.gz
+curl -s -O https://raw.githubusercontent.com/G7582908275/xiaomi-ax3000t-immortalwrt-hanwckf-firmware-build/refs/heads/master/zerotier_makefile-1.14.1.tar.gz
 #tar zxvf zerotier.tar.gz -C package/feeds/packages/
-tar zxvf ZeroTierOne-1.14.1.tar.gz -C package/feeds/packages/
+tar zxvf zerotier_makefile-1.14.1.tar.gz -C package/feeds/packages/
 echo "Replace source code"
 #rm zerotier.tar.gz
-rm ZeroTierOne-1.14.1.tar.gz
+rm zerotier_makefile-1.14.1.tar.gz
 #ls -l package/feeds/packages/zerotier
